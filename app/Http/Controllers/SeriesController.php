@@ -3,18 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SeriesController extends Controller
 {
     public function index(Request $request)
     {
         $request->get('id');
-        $series = [
-            'Punisher',
-            'Lost',
-            'Grey\'s Anatomy'
-        ];
-
+        $series = DB::select('select name from series;');
         return view('series.index', compact('series'));
         /*
         return view('listar-series', [
@@ -26,5 +22,14 @@ class SeriesController extends Controller
     public function create() 
     {
         return view('series.create');
+    }
+
+    public function store(Request $request) 
+    {
+        $nomeSerie = $request->input('nome');
+        if(DB::insert('insert into series (name) values (?)', [$nomeSerie])) {
+            return "Ok";
+        }
+        return "Deu erro";
     }
 }

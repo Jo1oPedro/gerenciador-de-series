@@ -10,7 +10,7 @@ class SeriesController extends Controller
     public function index(Request $request)
     {
         $request->get('id');
-        $series = DB::select('select name from series;');
+        //$series = DB::select('select name from series;');
         return view('series.index', compact('series'));
         /*
         return view('listar-series', [
@@ -27,9 +27,7 @@ class SeriesController extends Controller
     public function store(Request $request) 
     {
         $nomeSerie = $request->input('nome');
-        if(DB::insert('insert into series (name) values (?)', [$nomeSerie])) {
-            return "Ok";
-        }
-        return "Deu erro";
+        //DB::insert('insert into series (name) values (?)', [$nomeSerie]);
+        return redirect('/series');
     }
 }

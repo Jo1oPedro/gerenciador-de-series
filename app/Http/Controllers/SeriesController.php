@@ -24,6 +24,12 @@ class SeriesController extends Controller
     public function store(Request $request) 
     {
         Serie::create($request->all());
-        return redirect('/series');
+        //return redirect('/series');
+        //return redirect(route('series.index'));
+        //return redirect()->route('series.index');
+        
+        // A partir da versão 9 do laravel a versão abaixo surgiu
+        // cria uma resposta de redirecionamento para a rota com o nome no parametro
+        return to_route('series.index');
     }
 }

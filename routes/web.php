@@ -18,7 +18,11 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-Route::get('/', [SeriesController::class, 'index']);
-Route::get('/series', [SeriesController::class, 'index']);
-Route::get('/series/create', [SeriesController::class, 'create']);
-Route::post('/series/store', [SeriesController::class, 'store']);
+/*Route::controller(SeriesController::class)->group(function() {
+    Route::get('/', 'index');
+    Route::get('/series', 'index')->name('series.create');
+    Route::get('/series/create', 'create');
+    Route::post('/series/store', 'store');
+});*/
+
+Route::resource('/series', SeriesController::class);

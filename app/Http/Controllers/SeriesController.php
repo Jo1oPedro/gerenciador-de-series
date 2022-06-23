@@ -32,4 +32,9 @@ class SeriesController extends Controller
         // cria uma resposta de redirecionamento para a rota com o nome no parametro
         return to_route('series.index');
     }
+
+    public function destroy(Serie $series) {
+        Serie::destroy($series->id);
+        return to_route('series.index');
+    }
 }

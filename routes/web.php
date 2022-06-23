@@ -25,4 +25,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('/series/store', 'store');
 });*/
 
+//Route::post('/series/destroy/{id}', [SeriesController::class, 'destroy'])->name('series.destroy');
+Route::get('/', [SeriesController::class, 'index']);
 Route::resource('/series', SeriesController::class);
+//->only(['index', 'create', 'store', 'delete']);

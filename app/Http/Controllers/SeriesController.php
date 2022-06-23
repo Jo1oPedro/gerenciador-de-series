@@ -13,7 +13,6 @@ class SeriesController extends Controller
         $request->get('id');
         $series = Serie::query()->orderBy('name')->get();
         $mensagem = $request->session()->get('mensagem.sucesso');
-        $request->session()->forget('mensagem.sucesso');
         return view('series.index', compact('series'))
             ->with('mensagem', $mensagem);
 
@@ -38,8 +37,7 @@ class SeriesController extends Controller
 
     public function destroy(Serie $series, Request $request) {
         Serie::destroy($series->id);
-        //>session()->put('mensagem.sucesso', 'Série removida com sucesso');
-        $request->session()->put('mensagem.sucesso', 'Série removida com sucesso');
+        $request->session()->flash('mensagem.sucesso', 'Série removida com sucesso'); // com o metodo flash não é necessario utilizar o forget no index pois ele já realiza isso
         return to_route('series.index');
     }
 }

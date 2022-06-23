@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class SeriesController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $request->get('id');
         $series = Serie::query()->orderBy('name')->get();
-        $mensagem = $request->session()->get('mensagem.sucesso');
+        $mensagem = session('mensagem.sucesso'); // caso fosse necessario adicionar algum valor na session, poderia ser feito session(['mensagem.sucesso' => 'Série removida com sucesso']);
         return view('series.index', compact('series'))
             ->with('mensagem', $mensagem);
 
@@ -25,7 +24,9 @@ class SeriesController extends Controller
 
     public function store(Request $request) 
     {
-        Serie::create($request->all());
+        $serie = Serie::create($request->all());
+        //session(['mensagem.sucesso' => "Serie $request->name adicionada com sucesso"]); // dessa forma ele não faz o flash, logo a mensagem continuaria sendo exibida na index
+        $request->session()->flash('mensagem.sucesso', "Série $serie->name adicionada com sucesso");
         //return redirect('/series');
         //return redirect(route('series.index'));
         //return redirect()->route('series.index');
@@ -36,8 +37,9 @@ class SeriesController extends Controller
     }
 
     public function destroy(Serie $series, Request $request) {
-        Serie::destroy($series->id);
-        $request->session()->flash('mensagem.sucesso', 'Série removida com sucesso'); // com o metodo flash não é necessario utilizar o forget no index pois ele já realiza isso
+        $nomeSerie = $series->name;
+        $series->delete();
+        $request->session()->flash('mensagem.sucesso', "Série $nomeSerie removida com sucesso"); // com o metodo flash não é necessario utilizar o forget no index pois ele já realiza isso
         return to_route('series.index');
     }
 }

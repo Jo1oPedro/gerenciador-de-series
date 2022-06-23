@@ -12,7 +12,10 @@ class SeriesController extends Controller
     {
         $request->get('id');
         $series = Serie::query()->orderBy('name')->get();
-        return view('series.index', compact('series'));
+        $mensagem = $request->session()->get('mensagem.sucesso');
+        $request->session()->forget('mensagem.sucesso');
+        return view('series.index', compact('series'))
+            ->with('mensagem', $mensagem);
 
     }
 
@@ -33,8 +36,10 @@ class SeriesController extends Controller
         return to_route('series.index');
     }
 
-    public function destroy(Serie $series) {
+    public function destroy(Serie $series, Request $request) {
         Serie::destroy($series->id);
+        //>session()->put('mensagem.sucesso', 'Série removida com sucesso');
+        $request->session()->put('mensagem.sucesso', 'Série removida com sucesso');
         return to_route('series.index');
     }
 }

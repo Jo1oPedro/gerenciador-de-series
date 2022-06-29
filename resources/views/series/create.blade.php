@@ -1,6 +1,6 @@
 <x-layout title="Nova Série">
 
-    <x-series.form :action="route('series.store')"/>
+    <x-series.form :action="route('series.store')" :nome="old('name')" :update="false" />
     <!--<form action="/series" method="post">-->
     <!--
     <form action="{{ route('series.store')}}" method="post">

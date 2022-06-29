@@ -23,6 +23,10 @@ class SeriesController extends Controller
 
     public function store(Request $request) 
     {
+        $request->validate([
+            'name' => 'required|min:3',
+
+        ]);
         $serie = Serie::create($request->all());
         
         //session(['mensagem.sucesso' => "Serie $request->name adicionada com sucesso"]); // dessa forma ele não faz o flash, logo a mensagem continuaria sendo exibida na index

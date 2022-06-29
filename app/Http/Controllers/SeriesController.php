@@ -56,6 +56,15 @@ class SeriesController extends Controller
 
     public function edit(Serie $series) 
     {
+        /*
+            //dd($series->temporadas);
+            Se acessar como uma propriedade o laravel acessa como uma coleção e já pega as temporadas
+        */
+        /*
+            //$series->temporadas()->whereId(1)->get();
+            Se acessar através do método, você tem um relacionamento, logo um querybuild que da a possibilidade de filtrar isso pra depois pegar a coleção
+        */
+        
         return view('series.edit', compact('series'));
         /*
             dessa forma também é valido

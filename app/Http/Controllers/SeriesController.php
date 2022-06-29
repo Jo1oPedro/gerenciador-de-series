@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SeriesFormRequest;
 use App\Models\Serie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,12 +22,15 @@ class SeriesController extends Controller
         return view('series.create');
     }
 
-    public function store(Request $request) 
+    public function store(SeriesFormRequest $request) 
     {
-        $request->validate([
-            'name' => 'required|min:3',
+        /*
+            $request->validate([
+                'name' => 'required|min:3',
 
-        ]);
+            ]);
+            A forma mais adequada de se fazer isso é utilizando um form request
+        */
         $serie = Serie::create($request->all());
         
         //session(['mensagem.sucesso' => "Serie $request->name adicionada com sucesso"]); // dessa forma ele não faz o flash, logo a mensagem continuaria sendo exibida na index
@@ -59,7 +63,7 @@ class SeriesController extends Controller
         */    
     }
 
-    public function update(Serie $series, Request $request) 
+    public function update(Serie $series, SeriesFormRequest $request) 
     {
         $series->update(['name' => $request->name]);
         /*

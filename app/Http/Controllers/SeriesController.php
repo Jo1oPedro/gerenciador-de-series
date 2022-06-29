@@ -43,7 +43,7 @@ class SeriesController extends Controller
         $series->delete();
         //$request->session()->flash('mensagem.sucesso', "Série '$series->name' removida com sucesso"); // com o metodo flash não é necessario utilizar o forget no index pois ele já realiza isso
         return to_route('series.index')
-            ->with('mensagem.sucesso', "Série '$serie->name' removida com sucesso");
+            ->with('mensagem.sucesso', "Série '$series->name' removida com sucesso");
     }
 
     public function edit(Serie $series) 

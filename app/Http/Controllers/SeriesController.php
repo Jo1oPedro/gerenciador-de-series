@@ -11,7 +11,18 @@ class SeriesController extends Controller
 {
     public function index()
     {
-        $series = Serie::query()->orderBy('name')->get();
+        /*
+            $series = Serie::query()->orderBy('name')->get();
+            Já foi utilizado um metodo booted na model de Series para fazer com que as series retornadas
+            a partir do builder sejam sempre ordenadas de forma alfabetica
+        */
+        /*
+            $series = Serie::with(['temporadas'])->get();
+            Adicionando uma propriedade de with com valor 'temporadas' na model de Serie,
+            não é mais necessario utilizado with aqui;
+        */
+        $series = Serie::all();
+
         $mensagem = session('mensagem.sucesso'); // caso fosse necessario adicionar algum valor na session, poderia ser feito session(['mensagem.sucesso' => 'Série removida com sucesso']);
         return view('series.index', compact('series'))
             ->with('mensagem', $mensagem);

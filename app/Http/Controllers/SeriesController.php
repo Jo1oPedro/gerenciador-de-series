@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SeriesFormRequest;
-use App\Models\Serie;
+use App\Models\Series;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +21,7 @@ class SeriesController extends Controller
             Adicionando uma propriedade de with com valor 'temporadas' na model de Serie,
             não é mais necessario utilizado with aqui;
         */
-        $series = Serie::all();
+        $series = Series::all();
 
         $mensagem = session('mensagem.sucesso'); // caso fosse necessario adicionar algum valor na session, poderia ser feito session(['mensagem.sucesso' => 'Série removida com sucesso']);
         return view('series.index', compact('series'))
@@ -42,7 +42,7 @@ class SeriesController extends Controller
             ]);
             A forma mais adequada de se fazer isso é utilizando um form request
         */
-        $serie = Serie::create($request->all());
+        $serie = Series::create($request->all());
         
         //session(['mensagem.sucesso' => "Serie $request->name adicionada com sucesso"]); // dessa forma ele não faz o flash, logo a mensagem continuaria sendo exibida na index
         //$request->session()->flash('mensagem.sucesso', "Série '$serie->name' adicionada com sucesso");
@@ -57,7 +57,7 @@ class SeriesController extends Controller
             ->with('mensagem.sucesso', "Série '$serie->name' adicionada com sucesso");
     }
 
-    public function destroy(Serie $series, Request $request) 
+    public function destroy(Series $series, Request $request) 
     {
         $series->delete();
         //$request->session()->flash('mensagem.sucesso', "Série '$series->name' removida com sucesso"); // com o metodo flash não é necessario utilizar o forget no index pois ele já realiza isso
@@ -65,7 +65,7 @@ class SeriesController extends Controller
             ->with('mensagem.sucesso', "Série '$series->name' removida com sucesso");
     }
 
-    public function edit(Serie $series) 
+    public function edit(Series $series) 
     {
         /*
             //dd($series->temporadas);
@@ -83,7 +83,7 @@ class SeriesController extends Controller
         */    
     }
 
-    public function update(Serie $series, SeriesFormRequest $request) 
+    public function update(Series $series, SeriesFormRequest $request) 
     {
         $series->update(['name' => $request->name]);
         /*

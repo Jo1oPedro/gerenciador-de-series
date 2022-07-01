@@ -8,6 +8,7 @@ use App\Models\Season;
 use App\Models\Series;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class SeriesController extends Controller
 {
@@ -71,6 +72,7 @@ class SeriesController extends Controller
         
         // A partir da versão 9 do laravel a versão abaixo surgiu
         // cria uma resposta de redirecionamento para a rota com o nome no parametro
+
         return to_route('series.index')
             ->with('mensagem.sucesso', "Série '$serie->name' adicionada com sucesso");
     }

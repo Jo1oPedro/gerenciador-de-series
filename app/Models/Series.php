@@ -17,7 +17,11 @@ class Series extends Model
 
     public function seasons() 
     {
-        return $this->hasMany(Season::class, 'series_id');
+        /* it is not necessary to define the second parameter on this 
+            relationship because it takes the name of the class => Series
+            and put in snake case with id, so it becomes series_id
+        */
+        return $this->hasMany(Season::class/*, 'series_id'*/);
     }
 
     protected static function booted() 

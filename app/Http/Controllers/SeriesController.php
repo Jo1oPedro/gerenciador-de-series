@@ -43,7 +43,16 @@ class SeriesController extends Controller
             A forma mais adequada de se fazer isso é utilizando um form request
         */
         $serie = Series::create($request->all());
-        
+        for($i = 1; $i <= $request->seasonQtd; $i++) {
+            $season = $serie->seasons()->create([
+                'number' => $i,
+            ]);
+            for($j = 1; $j <= $request->episodesPerSeason; $j++) {
+                $season->episodes()->create([
+                    'number' => $j,
+                ]);
+            }
+        }
         //session(['mensagem.sucesso' => "Serie $request->name adicionada com sucesso"]); // dessa forma ele não faz o flash, logo a mensagem continuaria sendo exibida na index
         //$request->session()->flash('mensagem.sucesso', "Série '$serie->name' adicionada com sucesso");
         

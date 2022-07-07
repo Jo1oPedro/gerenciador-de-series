@@ -44,25 +44,31 @@ class SeriesController extends Controller
             ]);
             A forma mais adequada de se fazer isso é utilizando um form request
         */
-        $serie = Series::create($request->all());
-        $seasons = [];
-        for($i = 1; $i <= $request->seasonsQtd; $i++) {
-            $seasons [] = [
-                'series_id' => $serie->id,
-                'number' => $i,
-            ];
-        }
-        Season::insert($seasons);
-        $episodes = [];
-        foreach($serie->seasons as $season) {
-            for($j = 1; $j <= $request->episodesPerSeason; $j++) {
-                $episodes [] = [
-                    'season_id' => $season->id,
-                    'number' => $j,
+        $serie = DB::transaction(function() use ($request) {
+        //DB::beginTransaction();
+            $serie = Series::create($request->all());
+            $seasons = [];
+            for($i = 1; $i <= $request->seasonsQtd; $i++) {
+                $seasons [] = [
+                    'series_id' => $serie->id,
+                    'number' => $i,
                 ];
             }
-        }
-        Episode::insert($episodes);
+            Season::insert($seasons);
+            $episodes = [];
+            foreach($serie->seasons as $season) {
+                for($j = 1; $j <= $request->episodesPerSeason; $j++) {
+                    $episodes [] = [
+                        'season_id' => $season->id,
+                        'number' => $j,
+                    ];
+                }
+            }
+            Episode::insert($episodes);
+        //DB::commit();
+        
+            return $serie;
+        });
         //session(['mensagem.sucesso' => "Serie $request->name adicionada com sucesso"]); // dessa forma ele não faz o flash, logo a mensagem continuaria sendo exibida na index
         //$request->session()->flash('mensagem.sucesso', "Série '$serie->name' adicionada com sucesso");
         

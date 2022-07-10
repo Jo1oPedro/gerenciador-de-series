@@ -18,27 +18,27 @@ class EloquentSeriesRepository implements SeriesRepository
             //DB::beginTransaction();
             $serie = Series::create($request);
             $request = (object) $request;
-                $seasons = [];
-                for($i = 1; $i <= $request->seasonsQtd; $i++) {
-                    $seasons [] = [
-                        'series_id' => $serie->id,
-                        'number' => $i,
+            $seasons = [];
+            for($i = 1; $i <= $request->seasonsQtd; $i++) {
+                $seasons [] = [
+                    'series_id' => $serie->id,
+                    'number' => $i,
+                ];
+            }
+            Season::insert($seasons);
+            $episodes = [];
+            foreach($serie->seasons as $season) {
+                for($j = 1; $j <= $request->episodesPerSeason; $j++) {
+                    $episodes [] = [
+                        'season_id' => $season->id,
+                        'number' => $j,
                     ];
                 }
-                Season::insert($seasons);
-                $episodes = [];
-                foreach($serie->seasons as $season) {
-                    for($j = 1; $j <= $request->episodesPerSeason; $j++) {
-                        $episodes [] = [
-                            'season_id' => $season->id,
-                            'number' => $j,
-                        ];
-                    }
-                }
-                Episode::insert($episodes);
+            }
+            Episode::insert($episodes);
             //DB::commit();
             
-                return $serie;
-            });
+            return $serie;
+        });
     }
 }

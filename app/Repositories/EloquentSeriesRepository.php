@@ -41,4 +41,12 @@ class EloquentSeriesRepository implements SeriesRepository
             return $serie;
         });
     }
+
+    public static function watched(mixed $request) : void
+    {
+        DB::transaction(function () use ($request) {
+            DB::table('episodes')->whereIn('id', $request->episodes)->update(['watched' => true]);
+            DB::table('episodes')->whereNotIn('id', $request->episodes)->update(['watched' => false]);
+        });
+    }
 }

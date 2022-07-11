@@ -1,11 +1,5 @@
 <?php
 
-use App\Http\Controllers\EpisodesController;
-use App\Http\Controllers\loginController;
-use App\Http\Controllers\SeasonsController;
-use App\Http\Controllers\SeriesController;
-use App\Http\Middleware\Autenticador;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,12 +25,13 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 //Route::post('/series/destroy/{id}', [SeriesController::class, 'destroy'])->name('series.destroy');
-Route::get('/', [SeriesController::class, 'index'])->middleware(Autenticador::class);
-Route::resource('/series', SeriesController::class);
-Route::get('/series/{series}/seasons', [SeasonsController::class, 'index'])->name('seasons.index');
-//->only(['index', 'create', 'store', 'delete']);
-Route::get('/seasons/{season}/episodes', [EpisodesController::class, 'index'])->name('episodes.index');
-Route::post('/seasons/{season}/episodes', [EpisodesController::class, 'watched'])->name('episodes.watched');
 
-Route::get('/login', [loginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('signIn');
+/*Route::get('/', function () {
+    return view('welcome');
+});*/
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

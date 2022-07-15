@@ -38,6 +38,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::resource('/series', SeriesController::class);
+Route::get('/', [SeriesController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
@@ -58,8 +59,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
-        
-    Route::get('/', [SeriesController::class, 'index']);
         
     Route::get('/series/{series}/seasons', [SeasonsController::class, 'index'])->name('seasons.index');
     //->only(['index', 'create', 'store', 'delete']);

@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SeriesCreated as EventsSeriesCreated;
 use App\Http\Middleware\Autenticador;
 use App\Http\Requests\SeriesFormRequest;
+use App\Mail\SeriesCreated;
 use App\Models\Series;
+use App\Models\User;
 use App\Repositories\SeriesRepository;
+use DateTime;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class SeriesController extends Controller
 {
@@ -50,7 +56,25 @@ class SeriesController extends Controller
             ]);
             A forma mais adequada de se fazer isso é utilizando um form request
         */
-        $serie = $this->repository->add($request->all());
+        $newSerieId = User::latest()->first()->id + 1;
+        //$serie = $this->repository->add($request->all());
+        $seriesCreatedEvent = new EventsSeriesCreated(
+            $request->name,//$serie->name,
+            $newSerieId,//$serie->id,
+            $request->seasonsQtd,
+            $request->episodesPerSeason,   
+        );
+        
+        /*EventsSeriesCreated::dispatch(
+            $serie->name,
+            $serie->id,
+            $request->seasonQtd,
+            $request->episodePerSeason,   
+        );*/
+
+        event($seriesCreatedEvent);
+        //Mail::to(User::all())->send($email);
+        //Mail::to($request->user());
         //session(['mensagem.sucesso' => "Serie $request->name adicionada com sucesso"]); // dessa forma ele não faz o flash, logo a mensagem continuaria sendo exibida na index
         //$request->session()->flash('mensagem.sucesso', "Série '$serie->name' adicionada com sucesso");
         
@@ -62,7 +86,7 @@ class SeriesController extends Controller
         // cria uma resposta de redirecionamento para a rota com o nome no parametro
 
         return to_route('series.index')
-            ->with('mensagem.sucesso', "Série '$serie->name' adicionada com sucesso");
+            ->with('mensagem.sucesso', "Série '$request->name' adicionada com sucesso");
     }
 
     public function destroy(Series $series, Request $request) 

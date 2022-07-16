@@ -52,7 +52,7 @@ class SeriesController extends Controller
     public function store(SeriesFormRequest $request) 
     {
         $coverPath = 'series_cover/defaultUser.jpg';
-        if($request->cover) {
+        if($request->hasFile('cover')) {
             $coverPath = $request->file('cover')->store('series_cover', 'public');
         }
         /*
@@ -62,7 +62,10 @@ class SeriesController extends Controller
             ]);
             A forma mais adequada de se fazer isso é utilizando um form request
         */
-        $newSerieId = User::latest()->first()->id + 1;
+        $newSerieId = 1;
+        if(count(Series::all()) > 0) {
+            $newSerieId = Series::latest()->first()->id + 1;
+        }
         //$serie = $this->repository->add($request->all());
         $seriesCreatedEvent = new EventsSeriesCreated(
             $request->name,//$serie->name,

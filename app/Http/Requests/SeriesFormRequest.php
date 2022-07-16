@@ -25,6 +25,7 @@ class SeriesFormRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|string|unique:series,name',
+            'cover' => 'sometimes|image|mimes:png,jpg,jpeg,gif'
         ];
     }
 

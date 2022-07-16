@@ -49,6 +49,10 @@ class SeriesController extends Controller
 
     public function store(SeriesFormRequest $request) 
     {
+        $coverPath = 'series_cover/defaultUser.jpg';
+        if($request->cover) {
+            $coverPath = $request->file('cover')->store('series_cover', 'public');
+        }
         /*
             $request->validate([
                 'name' => 'required|min:3',
@@ -62,7 +66,8 @@ class SeriesController extends Controller
             $request->name,//$serie->name,
             $newSerieId,//$serie->id,
             $request->seasonsQtd,
-            $request->episodesPerSeason,   
+            $request->episodesPerSeason, 
+            $coverPath,  
         );
         
         /*EventsSeriesCreated::dispatch(

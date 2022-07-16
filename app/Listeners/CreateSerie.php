@@ -32,6 +32,7 @@ class CreateSerie
             'id' => $event->seriesId,
             'seasonsQtd' => $event->seriesSeasonsQtd,
             'episodesPerSeason' => $event->seriesEpisodesPerSeason,
+            'cover' => $event->coverPath,
         ];
         $this->seriesRepository->add($elementsOfTheSerie);
     }

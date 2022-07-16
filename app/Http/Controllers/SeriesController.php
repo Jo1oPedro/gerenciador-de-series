@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\SeriesCreated as EventsSeriesCreated;
+use App\Events\SeriesDeleted;
 use App\Http\Middleware\Autenticador;
 use App\Http\Requests\SeriesFormRequest;
+use App\Jobs\DeleteCover;
 use App\Mail\SeriesCreated;
 use App\Models\Series;
 use App\Models\User;
@@ -97,6 +99,13 @@ class SeriesController extends Controller
     public function destroy(Series $series, Request $request) 
     {
         $series->delete();
+        $serieDeleted = new SeriesDeleted(
+            $series->cover,
+        );
+        if($series->cover != 'series_cover/defaultUser.jpg') {
+            //event($serieDeleted);
+            DeleteCover::dispatch($series->cover);
+        }
         //$request->session()->flash('mensagem.sucesso', "Série '$series->name' removida com sucesso"); // com o metodo flash não é necessario utilizar o forget no index pois ele já realiza isso
         return to_route('series.index')
             ->with('mensagem.sucesso', "Série '$series->name' removida com sucesso");
